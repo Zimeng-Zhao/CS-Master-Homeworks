@@ -1,0 +1,47 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+#problem1
+# Set the working directory
+import os
+os.chdir("C:\\Users\\65181\\Desktop\\513")
+
+# Read the dataset
+mydataset = pd.read_csv('breast-cancer-wisconsin.csv', na_values="?", dtype=np.float64)
+
+# Summarize each column
+print(mydataset.describe())
+
+# Identify missing values
+print(mydataset.isna().sum())
+
+# Replace missing values with column means
+f6_mean = mydataset['F6'].mean(skipna=True)
+mydataset['F6'].fillna(f6_mean, inplace=True)
+
+# Display frequency table of Class vs. F6
+print(pd.crosstab(mydataset['Class'], mydataset['F6']))
+
+# Display scatter plots of each pair of variables F1 to F6
+plt.figure()
+pd.plotting.scatter_matrix(mydataset.iloc[:, 1:7], c=mydataset['Class'], figsize=(10,10), marker='o', s=30, alpha=.7, cmap='coolwarm')
+plt.suptitle("The Scatter Plot Of Breast Cancer")
+plt.show()
+
+# Display box plots for columns F7 to F9
+mydataset.iloc[:, 7:10].boxplot()
+plt.show()
+
+#problem2
+import pandas as pd
+import numpy as np
+
+# Read the dataset
+set2 = pd.read_csv('breast-cancer-wisconsin.csv', na_values="?", dtype=np.float64)
+
+# Remove rows with missing values
+set2_rm = set2.dropna()
+
+# View the resulting dataset
+print(set2_rm.head())

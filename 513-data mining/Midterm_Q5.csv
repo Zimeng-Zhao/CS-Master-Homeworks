@@ -1,0 +1,4 @@
+Purchase,A,B,Total,P(Buy),,Puchase,Buy,Not Buy,Total
+Buy,60,48,108,0.45,,North,36,24,60
+Not Buy,86,48,132,0.55,,,,,
+,,,240,,,,,,

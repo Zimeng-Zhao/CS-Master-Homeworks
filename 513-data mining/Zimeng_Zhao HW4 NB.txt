@@ -1,0 +1,46 @@
+import pandas as pd
+import numpy as np
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix
+
+# load the data file
+mydata = pd.read_csv('breast-cancer-wisconsin.csv', na_values=['?'])
+
+# delete the rows with missing value
+mydata_clean = mydata.dropna()
+
+# converting the Class into type category
+mydata['Class'] = pd.Categorical(mydata['Class'], categories=['2', '4'], ordered=False)
+mydata['Class'] = mydata['Class'].cat.rename_categories(['Benign', 'Malignant'])
+
+newdata = mydata.iloc[:, 1:10]
+target = mydata['Class']
+
+# sample size: 70%
+samp = int(0.70 * len(newdata))
+
+# set the seed
+np.random.seed(100)
+train_ind = np.random.choice(newdata.index, size=samp, replace=False)
+
+# loading 70% breast cancer record in training dataset
+training = newdata.iloc[train_ind]
+target_train = target.iloc[train_ind]
+
+# loading 30% breast cancer in test dataset
+test = newdata.drop(train_ind)
+target_test = target.drop(train_ind)
+
+# implementing Naive Bayes
+model_naive = GaussianNB()
+model_naive.fit(training, target_train)
+
+# predicting target class for the validation set
+predict_naive = model_naive.predict(test)
+
+# output of Naive Bayes Classifier
+conf_matrix = confusion_matrix(target_test, predict_naive, labels=['Benign', 'Malignant'])
+print(conf_matrix)
+
+accuracy = np.sum(np.diag(conf_matrix)) / np.sum(np.sum(conf_matrix)) * 100
+print("Accuracy: %.2f%%" % accuracy)

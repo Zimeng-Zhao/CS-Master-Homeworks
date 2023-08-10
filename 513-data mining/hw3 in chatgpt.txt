@@ -1,0 +1,33 @@
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+
+# load the data file
+mydata = pd.read_csv('breast-cancer-wisconsin.csv', na_values='?')
+
+# drop any rows with missing values
+mydata_clean = mydata.dropna()
+
+# split the data into training and test sets
+training, test = train_test_split(mydata_clean, test_size=0.3)
+
+# fit KNN classifier with k=3, 5, and 10
+knn3 = KNeighborsClassifier(n_neighbors=3)
+knn3.fit(training.iloc[:, :-1], training.iloc[:, -1])
+predict3 = knn3.predict(test.iloc[:, :-1])
+
+knn5 = KNeighborsClassifier(n_neighbors=5)
+knn5.fit(training.iloc[:, :-1], training.iloc[:, -1])
+predict5 = knn5.predict(test.iloc[:, :-1])
+
+knn10 = KNeighborsClassifier(n_neighbors=10)
+knn10.fit(training.iloc[:, :-1], training.iloc[:, -1])
+predict10 = knn10.predict(test.iloc[:, :-1])
+
+# print the classification results
+print('k=3:')
+print(pd.crosstab(predict3, test.iloc[:, -1]))
+print('k=5:')
+print(pd.crosstab(predict5, test.iloc[:, -1]))
+print('k=10:')
+print(pd.crosstab(predict10, test.iloc[:, -1]))
